@@ -20,18 +20,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.movierowtask.Models.Movie
+import com.example.movierowtask.Models.getMovies
 import com.example.movierowtask.ui.theme.MovieRowTaskTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             MovieRowTaskTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    var movies = mutableListOf("Scream", "LOTR", "Star Wars: Episode IV")
-                    MovieList(movies)
+                    MovieList()
                 }
             }
         }
@@ -39,14 +39,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MovieRow(title: String) {
-    Card(
-        modifier = Modifier
-            .padding(5.dp), shape = RoundedCornerShape(corner = CornerSize(5.dp)), elevation = 5.dp
+fun MovieRow(movie: Movie) {
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(5.dp), shape = RoundedCornerShape(corner = CornerSize(10.dp)),
+        elevation = 5.dp
     ) {
         Column() {
-            Box(
-                modifier = Modifier
+            Box(modifier = Modifier
                     .height(150.dp)
                     .fillMaxWidth()
             ) {
@@ -56,8 +56,10 @@ fun MovieRow(title: String) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopEnd) {
-                    Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "")
+                Box(modifier = Modifier.fillMaxSize().padding(10.dp),
+                    contentAlignment = Alignment.TopEnd
+                ) {
+                    Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "Add to Favorites")
                 }
             }
             Row(
@@ -67,8 +69,8 @@ fun MovieRow(title: String) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
-                Text(text = title)
-                Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "")
+                Text(movie.title, style = MaterialTheme.typography.h6)
+                Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "Details")
             }
         }
     }
@@ -76,10 +78,10 @@ fun MovieRow(title: String) {
 
 
 @Composable
-fun MovieList(movies: List<String> = listOf("1", "2")) {
+fun MovieList(movies: List<Movie> = getMovies()) {
     LazyColumn {
         items(movies) { movie ->
-            MovieRow(movie)
+            MovieRow(movie = movie)
         }
     }
 }
