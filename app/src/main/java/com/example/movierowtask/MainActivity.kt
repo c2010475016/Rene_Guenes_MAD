@@ -13,7 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            MyNav()
             MovieRowTaskTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
@@ -47,8 +48,8 @@ fun MovieRow(movie: Movie) {
     ) {
         Column() {
             Box(modifier = Modifier
-                    .height(150.dp)
-                    .fillMaxWidth()
+                .height(150.dp)
+                .fillMaxWidth()
             ) {
                 Image(
                     painter = painterResource(id = R.mipmap.avatar),
@@ -56,7 +57,9 @@ fun MovieRow(movie: Movie) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Box(modifier = Modifier.fillMaxSize().padding(10.dp),
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
                     contentAlignment = Alignment.TopEnd
                 ) {
                     Icon(imageVector = Icons.Default.FavoriteBorder, contentDescription = "Add to Favorites")
@@ -87,20 +90,21 @@ fun MovieList(movies: List<Movie> = getMovies()) {
 }
 
 
+@Preview
+@Composable
+fun Greeting() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        var name by remember {
+            mutableStateOf("")
+        }
 
+        Text(text = "Hello ${name}!")
 
-
-
-//
-//@Composable
-//fun Greeting(name: String) {
-//    Text(text = "Hello $name!")
-//}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    MovieRowTaskTheme {
-//        Greeting("Android")
-//    }
-//}
+        OutlinedTextField(
+            value = name,
+            onValueChange = {
+                name = it},
+            label = { Text("Name")}
+        )
+    }
+}
